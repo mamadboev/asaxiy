@@ -70,22 +70,31 @@ $config = [
             'rules'           => [
             ],
         ],
-        'response'   => [
-            'class'         => yii\web\Response::class,
-            'on beforeSend' => function ($event) {
-                $response = $event->sender;
-                if ($response->data !== null) {
-                    $response->data = [
-                        'success' => $response->isSuccessful,
-                        'data'    => $response->isSuccessful ? $response->data : new \yii\base\BaseObject(),
-                        'error'   => $response->isSuccessful ? new \yii\base\BaseObject() : [
-                            'code'    => $response->data['status'] ?? 0,
-                            'message' => $response->data['message'] ?? 'unknown error',
-                        ]
-                    ];
-                    $response->statusCode = 200;
-                }
-            },
+//        'response'   => [
+//            'class'         => yii\web\Response::class,
+//            'on beforeSend' => function ($event) {
+//                $response = $event->sender;
+//                if ($response->data !== null) {
+//                    $response->data = [
+//                        'success' => $response->isSuccessful,
+//                        'data'    => $response->isSuccessful ? $response->data : new \yii\base\BaseObject(),
+//                        'error'   => $response->isSuccessful ? new \yii\base\BaseObject() : [
+//                            'code'    => $response->data['status'] ?? 0,
+//                            'message' => $response->data['message'] ?? 'unknown error',
+//                        ]
+//                    ];
+//                    $response->statusCode = 200;
+//                }
+//            },
+//        ],
+        'response' => [
+            'formatters' => [
+                \yii\web\Response::FORMAT_JSON => [
+                    'class' => 'yii\web\JsonResponseFormatter',
+                    'prettyPrint' => YII_DEBUG, // use "pretty" output in debug mode
+                    'encodeOptions' => JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+                ],
+            ],
         ],
     ],
 
